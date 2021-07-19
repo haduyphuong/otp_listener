@@ -14,16 +14,22 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String message = 'Waiting message...';
-
+  final OtpListener otpListener = OtpListener();
   @override
   void initState() {
     super.initState();
-    OtpListener.listener((data) {
+    otpListener.listener((data) {
       log(data);
       setState(() {
         message = data;
       });
-    }, senderFrom: '19001900'); // or null, listener message of all sender
+    }, senderFrom: '19001900'); // or null, listens message of all sender
+  }
+
+  @override
+  void dispose() {
+    otpListener.unListener(); // cancel listener.
+    super.dispose();
   }
 
   @override
@@ -32,6 +38,12 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('OTP Listener plugin Flutter'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            otpListener.unListener();
+          },
         ),
         body: Center(
           child: Text(message),

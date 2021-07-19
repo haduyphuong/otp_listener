@@ -1,9 +1,9 @@
 /*
-* Plugin Flutter create by Ha Duy Phuong
-* Date create: 07/19/2021
-* Address: Hanoi, Vietnam
-* Email: haduyphuong1996@gmail.com
-* */
+ * Plugin Flutter create by Ha Duy Phuong
+ * Date create: 07/19/2021
+ * Address: Hanoi, Vietnam
+ * Email: haduyphuong1996@gmail.com
+ * */
 
 package com.ngovang.otp_listener;
 
@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -66,6 +65,11 @@ public class OtpListenerPlugin implements FlutterPlugin, EventChannel.StreamHand
             String sender = call.argument("phone");
             smsRetrieverClient.startSmsUserConsent(sender);
             result.success(null);
+        } else if (call.method.equals("unListener")) {
+            if (receiver != null) {
+                mContext.unregisterReceiver(receiver);
+                receiver = null;
+            }
         } else {
             result.notImplemented();
         }
@@ -109,8 +113,10 @@ public class OtpListenerPlugin implements FlutterPlugin, EventChannel.StreamHand
 
     @Override
     public void onCancel(Object arguments) {
-        mContext.unregisterReceiver(receiver);
-        receiver = null;
+        if (receiver != null) {
+            mContext.unregisterReceiver(receiver);
+            receiver = null;
+        }
     }
 
 
