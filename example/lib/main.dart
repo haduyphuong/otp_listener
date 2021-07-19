@@ -39,12 +39,6 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('OTP Listener plugin Flutter'),
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            otpListener.unListener();
-          },
-        ),
         body: Center(
           child: Text(message),
         ),

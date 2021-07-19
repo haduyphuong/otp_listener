@@ -5,3 +5,7 @@
 ## 0.0.2
 
 * Remove in ios
+
+## 0.0.3
+
+* Update document

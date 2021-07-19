@@ -16,7 +16,7 @@ To use this package :
   dependencies:
     flutter:
       sdk: flutter
-    otp_listener: ^0.0.2
+    otp_listener: ^0.0.3
 ```
 
 ### How to use:
@@ -38,16 +38,22 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String message = 'Waiting message...';
-
+  final OtpListener otpListener = OtpListener();
   @override
   void initState() {
     super.initState();
-    OtpListener.listener((data) {
+    otpListener.listener((data) {
       log(data);
       setState(() {
         message = data;
       });
-    }, senderFrom: '19001900'); // or null, listener message of all sender
+    }, senderFrom: '19001900'); // or null, listens message of all sender
+  }
+
+  @override
+  void dispose() {
+    otpListener.unListener(); // cancel listener.
+    super.dispose();
   }
 
   @override
