@@ -9,3 +9,7 @@
 ## 0.0.3
 
 * Update document
+
+## 0.0.4
+
+* Fix bug Remediation for Intent Redirection Vulnerability

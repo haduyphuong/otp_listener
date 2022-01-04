@@ -9,9 +9,11 @@ package com.ngovang.otp_listener;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -70,6 +72,7 @@ public class OtpListenerPlugin implements FlutterPlugin, EventChannel.StreamHand
                 mContext.unregisterReceiver(receiver);
                 receiver = null;
             }
+            result.success(null);
         } else {
             result.notImplemented();
         }
@@ -88,11 +91,17 @@ public class OtpListenerPlugin implements FlutterPlugin, EventChannel.StreamHand
                 if (SmsRetriever.SMS_RETRIEVED_ACTION.equals(intent.getAction())) {
                     Bundle extras = intent.getExtras();
                     Status smsRetrieverStatus = (Status) extras.get(SmsRetriever.EXTRA_STATUS);
-
                     switch (smsRetrieverStatus.getStatusCode()) {
                         case CommonStatusCodes.SUCCESS:
                             Intent consentIntent = extras.getParcelable(SmsRetriever.EXTRA_CONSENT_INTENT);
-                            mActivity.startActivityForResult(consentIntent, SMS_CONSENT_REQUEST);
+                            ComponentName packageReceived = consentIntent.resolveActivity(mActivity.getPackageManager());
+                            int flags = consentIntent.getFlags();
+                            if (packageReceived.getPackageName().equals("com.google.android.gms")
+                                    && packageReceived.getClassName().equals("com.google.android.gms.auth.api.phone.ui.UserConsentPromptActivity")
+                                    && (flags & Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0
+                                    && (flags & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0) {
+                                mActivity.startActivityForResult(consentIntent, SMS_CONSENT_REQUEST);
+                            }
                             break;
                         case CommonStatusCodes.TIMEOUT:
                             // Time out occurred, handle the error.
@@ -108,7 +117,14 @@ public class OtpListenerPlugin implements FlutterPlugin, EventChannel.StreamHand
         this.events = events;
         receiver = createSmsVerificationReceiver();
         IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
-        mContext.registerReceiver(receiver, intentFilter);
+        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            /* TO COMPLY WITH GOOGLE PLAY POLICY */
+            mContext.registerReceiver(receiver, intentFilter, SmsRetriever.SEND_PERMISSION,
+                    null,
+                    0);
+        } else {
+            mContext.registerReceiver(receiver, intentFilter);
+        }
     }
 
     @Override

@@ -4,14 +4,14 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 
 class OtpListener {
-  static final _singleton = OtpListener.internal();
+  static final _singleton = OtpListener._();
   factory OtpListener() {
     return _singleton;
   }
   static const _eventChannel = const EventChannel('NAME_EVENT_CHANNEl');
   static const _methodChannel = const MethodChannel('NAME_METHOD_CHANNEl');
 
-  OtpListener.internal();
+  OtpListener._();
   void listener(Function(String data) onData, {String? senderFrom}) {
     if (Platform.isAndroid) {
       _methodChannel.invokeMethod('setSenderPhone', {"phone": senderFrom});
