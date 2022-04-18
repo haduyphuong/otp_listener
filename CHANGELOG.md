@@ -13,3 +13,7 @@
 ## 0.0.4
 
 * Fix bug Remediation for Intent Redirection Vulnerability
+
+## 0.0.5
+
+* Remove jcenter deprecated
