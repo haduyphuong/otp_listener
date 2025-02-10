@@ -17,3 +17,7 @@
 ## 0.0.5
 
 * Remove jcenter deprecated
+
+## 0.0.6
+
+* Update SDK Flutter 3.0
