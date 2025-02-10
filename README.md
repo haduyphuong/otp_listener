@@ -16,7 +16,7 @@ To use this package :
   dependencies:
     flutter:
       sdk: flutter
-    otp_listener: ^0.0.6
+    otp_listener: ^0.0.7
 ```
 
 ### How to use:

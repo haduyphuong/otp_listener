@@ -1,6 +1,6 @@
 name: otp_listener
 description: Listener OTP SMS.
-version: 0.0.6
+version: 0.0.7
 homepage: https://ngovang.com
 repository: https://github.com/haduyphuong/otp_listener
 
